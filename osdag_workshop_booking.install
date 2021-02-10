@@ -1,0 +1,329 @@
+<?php
+// $Id$
+/**
+  * Implement hook_enable()
+  */
+function osdag_workshop_booking_enable() {
+  //Check if table exists, if not install the schema.
+  if((db_table_exists('list_states_of_india') == FALSE) || (db_table_exists('osdag_workshop_booking_proposal') == FALSE)) {
+    drupal_install_schema('osdag_workshop_booking');
+    _osdag_workshop_booking_default_insert('Andhra Pradesh');
+    _osdag_workshop_booking_default_insert('Arunachal Pradesh');
+    _osdag_workshop_booking_default_insert('Assam');
+    _osdag_workshop_booking_default_insert('Bihar');
+    _osdag_workshop_booking_default_insert('Chhattisgarh');
+    _osdag_workshop_booking_default_insert('Goa');
+    _osdag_workshop_booking_default_insert('Gujarat');
+    _osdag_workshop_booking_default_insert('Haryana');
+    _osdag_workshop_booking_default_insert('Himachal Pradesh');
+    _osdag_workshop_booking_default_insert('Jammu and Kashmir');
+    _osdag_workshop_booking_default_insert('Jharkhand');
+    _osdag_workshop_booking_default_insert('Karnataka');
+    _osdag_workshop_booking_default_insert('Kerala');
+    _osdag_workshop_booking_default_insert('Madhya Pradesh');
+    _osdag_workshop_booking_default_insert('Maharashtra');
+    _osdag_workshop_booking_default_insert('Manipur');
+    _osdag_workshop_booking_default_insert('Meghalaya');
+    _osdag_workshop_booking_default_insert('Mizoram');
+    _osdag_workshop_booking_default_insert('Nagaland');
+    _osdag_workshop_booking_default_insert('Odisha(Orissa)');
+    _osdag_workshop_booking_default_insert('Punjab');
+    _osdag_workshop_booking_default_insert('Rajasthan');
+    _osdag_workshop_booking_default_insert('Sikkim');
+    _osdag_workshop_booking_default_insert('Tamil Nadu');
+    _osdag_workshop_booking_default_insert('Telangana');
+    _osdag_workshop_booking_default_insert('Tripura');
+    _osdag_workshop_booking_default_insert('Uttar Pradesh');
+    _osdag_workshop_booking_default_insert('Uttarakhand');
+    _osdag_workshop_booking_default_insert('West Bengal');
+    _osdag_workshop_booking_default_insert('Andaman and Nicobar Islands');
+    _osdag_workshop_booking_default_insert('Chandigarh');
+    _osdag_workshop_booking_default_insert('Dadra and Nagar Haveli');
+    _osdag_workshop_booking_default_insert('Daman and Diu');
+    _osdag_workshop_booking_default_insert('Lakshadweep');
+    _osdag_workshop_booking_default_insert('National Capital Territory of Delhi');
+    _osdag_workshop_booking_default_insert('Puducherry (Pondicherry)');
+  }
+}
+/**
+ * Implementation of hook_install().
+ */
+function osdag_workshop_booking_install()
+{
+  drupal_install_schema('osdag_workshop_booking');
+    variable_set('mail_system', array('default-system' => 'DefaultMailSystem', 'osdag_workshop_booking' => 'WorkshopMailSystem'));
+}
+/**
+ * Implementation of hook_schema().
+ */
+function osdag_workshop_booking_schema()
+{
+$schema = array();
+$schema['list_states_of_india'] = array(
+  'description' => 'TODO: please describe this table!',
+  'fields' => array(
+    'id' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'serial',
+      'not null' => TRUE,
+    ),
+    'state' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '100',
+      'not null' => TRUE,
+      'default' => 'None',
+    ),
+  ),
+  'primary key' => array('id'),
+);
+    /* proposal */
+$schema['osdag_workshop_booking_proposal'] = array(
+  'description' => 'TODO: please describe this table!',
+  'fields' => array(
+    'id' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'serial',
+      'not null' => TRUE,
+    ),
+    'uid' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'creation_date' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => 0,
+    ),
+    'title' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '5',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'fname' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '30',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'lname' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '30',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'designation' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '30',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'email_id' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '30',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'contact_no' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => 0,
+    ),
+    'institute_company' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'address_of_institute_company' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '100',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'org_email' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '30',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'city_district' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'indian_state' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'pincode' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => 0,
+    ),
+    'workshop_type' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '30',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'exp_number_of_participent' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '40',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'participant_type' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '200',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'available_computer' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '10',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'if_yes_1' => array(
+      'description' => 'What is the Operating system (Windows, Linux etc.) [mention OS with configuration. Ex. Windows 10 or Ubuntu 18.04 etc',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'if_yes_2' => array(
+      'description' => 'Is there a projection facility at the computer lab?',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'if_yes_3' => array(
+      'description' => 'Are all the computers connected to the Internet?',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'if_no_1' => array(
+      'description' => 'Every participant has to have an individual computer with Osdag pre-installed in it.',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'if_no_2' => array(
+      'description' => 'All the participants should be accommodated in a single room with audio-visual projection facilities.',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'volunteers' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'from_w_date' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'end_w_date' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'travel_arrangement' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '100',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'how_did_you_here' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => TRUE,
+      'default' => 'none',
+    ),
+    'proposal_status' => array(
+      'description' => 'Prposal status is used to set the accept,reject state.',
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => 0,
+    ),
+    'approval_date' => array(
+      'description' => 'Proposal approval date',
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => 0,
+    ),
+    'approver_uid' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => 0,
+    ),
+    'disapprove_message' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => TRUE,
+    ),
+  ),
+  'primary key' => array('id'),
+);
+    return $schema;
+}
+/**
+ * Inserts default entry into list_states_of_india table
+ *
+ * @param $states of the list states of india
+ */
+function _osdag_workshop_booking_default_insert($states) {
+  $data = array(
+    'state' => $states,
+  );
+  drupal_write_record('list_states_of_india', $data);
+}
+/**
+ * Implementation of hook_uninstall().
+ */
+function osdag_workshop_booking_uninstall()
+{
+  drupal_uninstall_schema('osdag_workshop_booking');
+//Unset module keys in variable mail_system
+  $mail_system = variable_get('mail_system', array('default-system' => 'DefaultMailSystem', 'osdag_workshop_booking' => 'WorkshopMailSystem'));
+  unset($mail_system['osdag_workshop_booking']);
+  variable_set('mail_system', $mail_system);
+}

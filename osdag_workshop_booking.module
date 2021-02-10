@@ -1,0 +1,121 @@
+<?php
+require_once('workshop_registration_email.inc');
+/**
+ * Implementation of hook_menu().
+ */
+variable_set('mail_system', array('default-system' => 'DefaultMailSystem', 'osdag_workshop_booking' => 'WorkshopMailSystem'));
+function osdag_workshop_booking_menu()
+{
+    $items = array();
+    /* PROPOSAL */
+    $items['osdag-workshop-booking/registration'] = array(
+        'title' => 'Osdag Workshop Registration form',
+        'description' => 'Osdag Workshop Registration form',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'osdag_workshop_booking_form'
+        ),
+        'access arguments' => array(
+            'create workshop proposal'
+        ),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'workshop_registration.inc'
+    );
+    $items['osdag-workshop-booking/manage-proposal'] = array(
+        'title' => 'Osdag Workshop Registration Manage Proposal',
+        'description' => 'Osdag Workshop Registration Manage Proposal',
+        'page callback' => '_proposal_pending',
+        'page arguments' => array(
+            'osdag_workshop_booking_form'
+        ),
+        'access arguments' => array(
+            'approve workshop proposal'
+        ),
+        'file' => 'workshop_registration_process.inc'
+    );
+    $items['osdag-workshop-booking/manage-proposal/pending'] = array(
+        'title' => 'Pending Proposals',
+        'description' => 'Pending Proposals Queue',
+        'page callback' => '_proposal_pending',
+        'access callback' => 'user_access',
+        'access arguments' => array(
+            'approve workshop proposal'
+        ),
+        'type' => MENU_DEFAULT_LOCAL_TASK,
+        'weight' => 1,
+        'file' => 'workshop_registration_process.inc'
+    );
+    $items['osdag-workshop-booking/manage-proposal/all'] = array(
+        'title' => 'All Proposals',
+        'description' => 'All Proposals',
+        'page callback' => '_proposal_all',
+        'access callback' => 'user_access',
+        'access arguments' => array(
+            'approve workshop proposal'
+        ),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 2,
+        'file' => 'workshop_registration_process.inc'
+    );
+    $items['osdag-workshop-booking/manage-proposal/approve'] = array(
+        'title' => 'Osdag Workshop Registration Proposal Approval',
+        'description' => 'Osdag Workshop Registration Proposal Approval',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'osdag_workshop_booking_proposal_approval_form'
+        ),
+        'access arguments' => array(
+            'approve workshop proposal'
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'workshop_registration_process.inc'
+    );
+	/* ADMIN SETTINGS */
+	$items['admin/settings/osdag-workshop-booking'] = array(
+		'title' => 'Osdag workshop booking Settings',
+		'description' => 'Osdag Workshop Booking Settings',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array(
+			'osdag_workshop_booking_settings_form'
+		),
+		'access arguments' => array(
+			'administrator osdag workshop booking'
+		),
+		'type' => MENU_NORMAL_ITEM,
+		'file' => 'settings.inc'
+	);
+    return $items;
+}
+
+/**
+ * Implementation of hook_permission().
+ */
+function osdag_workshop_booking_permission()
+{
+    return array(
+        "create workshop proposal" => array(
+            "title" => t("Workshop Booking Proposal Form"),
+            "description" => t("Workshop Booking Proposal Form.")
+        ),
+        "approve workshop proposal" => array(
+            "title" => t("Workshop Booking Proposal Form approve"),
+            "description" => t("Workshop Booking Proposal Form approve.")
+        ),
+        "administrator osdag workshop booking" => array(
+            "title" => t("Workshop Booking administrator"),
+            "description" => t("Workshop Booking Proposal")
+        ),
+    );
+}
+
+function osdag_workshop_booking_list_of_states()
+{
+    $query = db_select('list_states_of_india');
+    $query->fields('list_states_of_india');
+    $states_list = $query->execute();
+    while ($states_list_data = $states_list->fetchObject())
+    {
+        $states[$states_list_data->state] = $states_list_data->state;
+    } //$states_list_data = $states_list->fetchObject()
+    return $states;
+}
